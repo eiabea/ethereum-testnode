@@ -6,20 +6,19 @@ volumes:
 
 services:
   ethereum_init:
-    build: .
+    image: eiabea/ethereum-testnode
     command: "init /genesis.json"
     volumes:
       - "./genesis.json:/genesis.json"
       - "chain:/root"
   ethereum:
-    build: .
-    command: "--nodiscover --maxpeers=0 --rpc --rpcapi='debug,txpool,personal,db,eth,net,web3' --rpcport=8545 --rpccorsdomain='*' --rpcaddr='0.0.0.0' --port 30303 --identity='eiabeaTestnet' --verbosity=5"
+    image: eiabea/ethereum-testnode
+    command: "--nodiscover --maxpeers=0 --rpc --rpcapi='debug,txpool,personal,db,eth,net,web3' --rpcport=8545 --rpccorsdomain='*' --rpcaddr='0.0.0.0' --port 30303 --identity='Testnode' --verbosity=5"
     depends_on:
       - "ethereum_init"
     ports:
       - "127.0.0.1:8545:8545"
       - "127.0.0.1:30303:30303"
     volumes:
-      - "./genesis.json:/genesis.json"
       - "./keystore:/root/.ethereum/keystore"
       - "chain:/root"

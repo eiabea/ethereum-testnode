@@ -1,7 +1,0 @@
-version: "2"
-
-services:
-  ethereum_init:
-    image: "docker.eiabea.com/shotgun/testnode:latest"
-  ethereum:
-    image: "docker.eiabea.com/shotgun/testnode:latest"
