@@ -16,36 +16,9 @@ Alpine based Ethereum Testnode with 5 pre-generated Accounts
 
 ## Quickstart
 
-### Docker-Compose
-
 ```
-version: "2"
-
-volumes:
-  chain:
-    driver: "local"
-
-services:
-  ethereum_init:
-    image: eiabea/ethereum-testnode
-    command: "init /genesis.json"
-    volumes:
-      - "./genesis.json:/genesis.json"
-      - "chain:/root"
-  ethereum:
-    build: eiabea/ethereum-testnode
-    command: "--nodiscover --maxpeers=0 --rpc --rpcapi='debug,txpool,personal,db,eth,net,web3' --rpcport=8545 --rpccorsdomain='*' --rpcaddr='0.0.0.0' --port 30303 --identity='Testnode' --verbosity=5"
-    depends_on:
-      - "ethereum_init"
-    ports:
-      - "127.0.0.1:8545:8545"
-      - "127.0.0.1:30303:30303"
-    volumes:
-      - "./keystore:/root/.ethereum/keystore"
-      - "chain:/root"
-```
-
-```
+git clone https://github.com/eiabea/ethereum-testnode.git
+cd ethereum-testnode
 docker-compose up
 ```
 
