@@ -16,46 +16,27 @@ Alpine based Ethereum Testnode with 5 pre-generated Accounts
 
 ## Quickstart
 
-```
-git clone https://github.com/eiabea/ethereum-testnode.git
-cd ethereum-testnode
-docker-compose up
-```
-
-## Build
+Runs node with default values, which also includes mining on one thread
 
 ```
-docker build --rm -t testnode .
-```
-
-## Init
-
-Generates the genesis block (has to be run only once)
-
-```
-docker run -v /path/to/genesis.json:/genesis.json -v chain:/root testnode init /genesis.json
+docker run -it -v /path/to/dag/location:/root/.ethash eiabea/ethereum-testnode
 ```
 
 ## Run
 
 ```
-docker run --rm --name eth_node -v /path/to/keystore:/root/.ethereum/keystore -v chain:/root testnode --nodiscover --maxpeers=0 --rpc --rpcapi='debug,txpool,personal,db,eth,net,web3' --rpcport=8545 --rpccorsdomain='*' --rpcaddr='0.0.0.0' --port 30303 --identity='Test' --verbosity=5
+docker run -it -v $(pwd)/dag:/root/.ethash \
+        -e TESTNODE_RPC_PORT=8454 \
+        -e TESTNODE_RPC_ADDRESS=0.0.0.0 \
+        -e TESTNODE_RPC_API=debug,txpool,personal,db,eth,net,web3 \
+        -e TESTNODE_IDENTITY=Testnode \
+        -e TESTNODE_VERBOSITY=5 \
+        -e TESTNODE_MINING=false \
+        eiabea/ethereum-testnode
 ```
 
 ## Access geth console
 
 ```
 docker exec -it eth_node /geth attach
-```
-
-## Start mining
-
-```
-docker exec -it eth_node /geth attach --exec "miner.start(1)"
-```
-
-## Stop mining
-
-```
-docker exec -it eth_node /geth attach --exec "miner.stop()"
 ```
