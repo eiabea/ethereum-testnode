@@ -13,7 +13,22 @@ RUN \
   apk del git go make gcc musl-dev linux-headers sed build-base cmake g++ curl-dev boost-dev && \
   rm -rf /go-ethereum && rm -rf /var/cache/apk/*
 
+COPY ./genesis.json /genesis.json
+COPY ./keystore /root/.ethereum/keystore
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+ENV TESTNODE_RPC_PORT 8454
+ENV TESTNODE_RPC_ADDRESS 0.0.0.0
+ENV TESTNODE_RPC_API debug,txpool,personal,db,eth,net,web3
+ENV TESTNODE_IDENTITY Testnode
+ENV TESTNODE_VERBOSITY 5
+ENV TESTNODE_MINING true
+ENV TESTNODE_MINING_THREADS 1
+
 EXPOSE 8545
 EXPOSE 30303
 
-ENTRYPOINT ["/geth"]
+VOLUME /root/.ethash
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
