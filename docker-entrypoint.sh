@@ -12,8 +12,8 @@ if [[ "${TESTNODE_MINING}" = true ]]; then
 fi
 
 
-echo "Initializing..."
-/geth init /genesis.json
+#echo "Initializing..."
+#/geth init /genesis.json
 echo "Starting node"
 /geth ${GETH_PARAMETERS}
 

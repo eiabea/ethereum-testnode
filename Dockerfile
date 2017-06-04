@@ -1,9 +1,11 @@
-FROM alpine:3.5
+FROM alpine:3.6
 MAINTAINER eiabea<developer@eiabea.com>
+
+ENV GO_ETHEREUM_VERSION=v1.6.5
 
 RUN \
   apk add --update git go make gcc musl-dev linux-headers build-base cmake boost-dev && \
-  git clone --depth 1 https://github.com/ethereum/go-ethereum && \
+  git clone --branch $GO_ETHEREUM_VERSION --depth 1 https://github.com/ethereum/go-ethereum && \
   (cd go-ethereum && make geth) && \
   cp go-ethereum/build/bin/geth /geth && \
   git clone --depth 1 --recursive -b release https://github.com/ethereum/solidity && \
@@ -18,9 +20,9 @@ COPY ./keystore /root/.ethereum/keystore
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-ENV TESTNODE_RPC_PORT 8454
+ENV TESTNODE_RPC_PORT 8545
 ENV TESTNODE_RPC_ADDRESS 0.0.0.0
-ENV TESTNODE_RPC_API debug,txpool,personal,db,eth,net,web3
+ENV TESTNODE_RPC_API rpc,debug,txpool,personal,db,eth,net,web3
 ENV TESTNODE_IDENTITY Testnode
 ENV TESTNODE_VERBOSITY 5
 ENV TESTNODE_MINING true
@@ -30,5 +32,7 @@ EXPOSE 8545
 EXPOSE 30303
 
 VOLUME /root/.ethash
+
+RUN /geth init /genesis.json
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
