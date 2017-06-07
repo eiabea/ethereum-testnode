@@ -5,20 +5,18 @@ volumes:
     driver: "local"
 
 services:
-  ethereum_init:
-    image: eiabea/ethereum-testnode
-    command: "init /genesis.json"
-    volumes:
-      - "./genesis.json:/genesis.json"
-      - "chain:/root"
   ethereum:
-    image: eiabea/ethereum-testnode
-    command: "--nodiscover --maxpeers=0 --rpc --rpcapi='debug,txpool,personal,db,eth,net,web3' --rpcport=8545 --rpccorsdomain='*' --rpcaddr='0.0.0.0' --port 30303 --identity='Testnode' --verbosity=5"
-    depends_on:
-      - "ethereum_init"
+    image: eiabea/ethereum-testnode:1.6.5
     ports:
       - "127.0.0.1:8545:8545"
       - "127.0.0.1:30303:30303"
     volumes:
-      - "./keystore:/root/.ethereum/keystore"
       - "chain:/root"
+    environment:
+      TESTNODE_RPC_PORT: "8545"
+      TESTNODE_RPC_ADDRESS: "0.0.0.0"
+      TESTNODE_RPC_API: "personal,eth,net,web3"
+      TESTNODE_IDENTITY: "Testnode"
+      TESTNODE_VERBOSITY: "5"
+      TESTNODE_MINING: "true"
+      TESTNODE_MINING_THREADS: "1"
