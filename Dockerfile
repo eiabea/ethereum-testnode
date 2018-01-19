@@ -1,8 +1,7 @@
-FROM alpine:3.6
-MAINTAINER eiabea<developer@eiabea.com>
+FROM alpine:3.7
 
-ENV GO_ETHEREUM_VERSION=v1.6.6
-ENV SOLIDITY_VERSION=v0.4.11
+ENV GO_ETHEREUM_VERSION=v1.7.3
+ENV SOLIDITY_VERSION=v0.4.19
 
 RUN \
   apk add --update git go make gcc musl-dev linux-headers build-base cmake boost-dev && \
